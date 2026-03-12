@@ -1,6 +1,6 @@
 <?php
 if($_SERVER["REQUEST_METHOD"] == "GET") {
- echo "<h3> Tentou acessar diretamente né?! </h3>"
+ echo "<h3> Tentou acessar diretamente né?! </h3>";
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $arquivo = $_FILES['imagem'];
 
     if ($arquivo['error'] === 0) {
-        $nomeOriginal`` = $arquivo['name'];
+        $nomeOriginal = $arquivo['name'];
         $tipo = $arquivo['type'];
         $tamanho = $arquivo['size']; 
         $tmpNome = $arquivo['tmp_name']; 
