@@ -1,15 +1,19 @@
 <?php
+if($_SERVER["REQUEST_METHOD"] == "GET") {
+ echo "<h3> Tentou acessar diretamente né?! </h3>"
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     
-    // Informações do arquivo enviado
+
     $arquivo = $_FILES['imagem'];
 
     if ($arquivo['error'] === 0) {
-        $nomeOriginal = $arquivo['name'];
+        $nomeOriginal`` = $arquivo['name'];
         $tipo = $arquivo['type'];
-        $tamanho = $arquivo['size']; // em bytes
-        $tmpNome = $arquivo['tmp_name']; // caminho temporário no servidor
+        $tamanho = $arquivo['size']; 
+        $tmpNome = $arquivo['tmp_name']; 
 
         echo "<h3>Upload de Teste Recebido!</h3>";
         echo "E-mail: " . htmlspecialchars($email) . "<br>";
@@ -17,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Tipo: " . $tipo . "<br>";
         echo "Tamanho: " . ($tamanho / 1024) . " KB<br>";
 
-        // TESTE: Vamos mover o arquivo para uma pasta local chamada 'uploads'
+      
         if (!is_dir('uploads')) {
             mkdir('uploads', 0777, true);
         }
