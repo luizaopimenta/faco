@@ -1,47 +1,14 @@
+
 name: Deploy via ftp
 
-on:
-  push:
-    branches:
-      - main
+on: push
 
 jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.3"
-          tools: composer
-
-      - name: Install dependencies
-        run: |
-          composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction
-
-      - name: Build secure deploy structure
-        run: |
-          mkdir -p deploy/faco deploy/public_html
-
-          rsync -av --delete \
-            --exclude='.git' \
-            --exclude='.github' \
-            --exclude='node_modules' \
-            --exclude='deploy' \
-            --exclude='storage/logs/*' \
-            --exclude='storage/framework/cache/data/*' \
-            --exclude='storage/framework/sessions/*' \
-            --exclude='storage/framework/views/*' \
-            ./ deploy/faco/
-
-          rsync -av --delete ./public/ deploy/public_html/
-
-          perl -0777 -i -pe "s#__DIR__.'/../vendor/autoload.php'#__DIR__.'/../faco/vendor/autoload.php'#g; s#__DIR__.'/../bootstrap/app.php'#__DIR__.'/../faco/bootstrap/app.php'#g" deploy/public_html/index.php
+      - uses: actions/checkout@v2
 
       - name: FTP Deploy Locaweb
         uses: locaweb/ftp-deploy@1.0.0
@@ -49,4 +16,4 @@ jobs:
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           password: ${{ secrets.PASS }}
-          localDir: "deploy"
+          localDir: "../faco"
