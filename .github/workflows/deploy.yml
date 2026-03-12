@@ -22,17 +22,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          if [ -f "composer.json" ] && [ -d "public" ]; then
-            APP_DIR="."
-          elif [ -f "form/composer.json" ] && [ -d "form/public" ]; then
-            APP_DIR="form"
-          else
-            echo "Estrutura Laravel não encontrada (public/ e composer.json)."
-            exit 1
-          fi
-
-          echo "APP_DIR=$APP_DIR" >> "$GITHUB_ENV"
-          composer install --working-dir="$APP_DIR" --no-dev --prefer-dist --optimize-autoloader --no-interaction
+          composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction
 
       - name: Build secure deploy structure
         run: |
@@ -47,9 +37,9 @@ jobs:
             --exclude='storage/framework/cache/data/*' \
             --exclude='storage/framework/sessions/*' \
             --exclude='storage/framework/views/*' \
-            "$APP_DIR/" deploy/faco/
+            ./ deploy/faco/
 
-          rsync -av --delete "$APP_DIR/public/" deploy/public_html/
+          rsync -av --delete ./public/ deploy/public_html/
 
           perl -0777 -i -pe "s#__DIR__.'/../vendor/autoload.php'#__DIR__.'/../faco/vendor/autoload.php'#g; s#__DIR__.'/../bootstrap/app.php'#__DIR__.'/../faco/bootstrap/app.php'#g" deploy/public_html/index.php
 
